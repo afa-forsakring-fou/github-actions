@@ -32,10 +32,6 @@ runs:
     if: github.event.repository.name == 'fou-web'
     run: yarn clean
 
-  - name: Echo github.event.repository.name
-    shell: bash
-    run: echo "${{ github.event.repository.name }}"
-
   - name: Get yarn and NextJS cache
     uses: ./composite-actions/.github/workflows/actions/yarn-cache
     with:
