@@ -4,8 +4,8 @@ inputs:
   GIT_TOKEN:
     description: 'GIT_TOKEN from secrets'
     required: true
-  HASURA_ADMIN_SECRET:
-    description: 'HASURA_ADMIN_SECRET from secrets'
+  X_HASURA_ADMIN_SECRET:
+    description: 'X_HASURA_ADMIN_SECRET from secrets'
     required: true
   HASURA_URL:
     description: 'HASURA_URL from secrets'
