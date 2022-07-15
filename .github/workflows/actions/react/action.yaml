@@ -20,23 +20,21 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - name: Setup Node.js
-    uses: actions/setup-node@v3.4.1
-    if: github.event.repository.name == 'fou-web'
-    with:
-      node-version: '14'
-      cache: 'yarn'
+#  - name: Setup Node.js
+#    uses: actions/setup-node@v3.4.1
+#    if: github.event.repository.name == 'fou-web'
+#    with:
+#      node-version: '14'
+#      cache: 'yarn'
       
   - name: Clean target
     shell: bash
     if: github.event.repository.name == 'fou-web'
     run: yarn clean
 
-#  - name: Checkout composite actions
-#    uses: actions/checkout@v3.0.2
-#    with:
-#      repository: afa-forsakring-fou/github-actions
-#      path: composite-actions
+  - name: Echo github.event.repository.name
+    shell: bash
+    run: echo "${{ github.event.repository.name }}"
 
   - name: Get yarn and NextJS cache
     uses: ./composite-actions/.github/workflows/actions/yarn-cache
