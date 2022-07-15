@@ -58,7 +58,7 @@ jobs:
         
       - name: Install packages & build
         run: |
-          yarn install --immutable-cache
+          yarn install
           yarn build
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
