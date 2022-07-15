@@ -57,8 +57,8 @@ jobs:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
 
-      - name: Setup node
-        uses: ./composite-actions/.github/workflows/actions/setup-node
+#      - name: Setup node
+#        uses: ./composite-actions/.github/workflows/actions/setup-node
 
       - name: Get yarn and NextJS cache
         uses: ./composite-actions/.github/workflows/actions/yarn-cache
