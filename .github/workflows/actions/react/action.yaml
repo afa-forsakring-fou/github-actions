@@ -20,12 +20,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - name: Setup Node.js
-    uses: actions/setup-node@v3.4.1
-    if: github.event.repository.name == 'fou-web'
-    with:
-      node-version: '14'
-      cache: 'yarn'
+  - name: Setup node
+    uses: ./composite-actions/.github/workflows/actions/setup-node
       
   - name: Clean target
     shell: bash
@@ -36,11 +32,15 @@ runs:
     uses: ./composite-actions/.github/workflows/actions/yarn-cache
     with:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+
+  - name: Install yarn
+    uses: ./composite-actions/.github/workflows/actions/yarn-install
+    with:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
         
-  - name: Install packages & build
+  - name: Build
     shell: bash
     run: |
-      yarn install --immutable-cache
       yarn build
     env:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
@@ -61,3 +61,24 @@ runs:
       CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
       X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
       HASURA_URL: ${{ inputs.HASURA_URL }}
+  
+  - name: Upload coverage data
+    uses: actions/upload-artifact@v2
+    if: steps.run_tests.outputs.status == 'success'
+    with:
+      name: coverage
+      path: coverag
+
+  - name: Upload screenshots
+    uses: actions/upload-artifact@v3.1.0
+    if: steps.run_tests.outputs.status != 'success'
+    with:
+      name: cypress-screenshots
+      path: cypress/screenshot
+
+  - name: Upload videos
+    uses: actions/upload-artifact@v3.1.0
+    if: steps.run_tests.outputs.status != 'success'
+    with:
+      name: cypress-videos
+      path: cypress/videos

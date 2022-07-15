@@ -1,0 +1,12 @@
+name: 'Setup node'
+description: 'If fou-wew -> setup node enviroment with version 14'
+  
+runs:
+  using: "composite"
+  steps:
+  - name: Setup Node.js
+    uses: actions/setup-node@v3.4.1
+    if: github.event.repository.name == 'fou-web'
+    with:
+      node-version: '14'
+      cache: 'yarn'

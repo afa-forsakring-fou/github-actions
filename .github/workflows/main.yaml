@@ -18,6 +18,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.0.2
+        with:
+          submodules: recursive
+          token: ${{ secrets.GIT_TOKEN }}
 
       - name: Checkout composite actions
         uses: actions/checkout@v3.0.2
@@ -33,27 +36,6 @@ jobs:
           HASURA_URL: ${{ secrets.HASURA_URL }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-      
-      - name: Upload coverage data
-        uses: actions/upload-artifact@v2
-        if: steps.run_tests.outputs.status == 'success'
-        with:
-          name: coverage
-          path: coverage
-
-      - name: Upload screenshots
-        uses: actions/upload-artifact@v3.1.0
-        if: steps.run_tests.outputs.status != 'success'
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-
-      - name: Upload videos
-        uses: actions/upload-artifact@v3.1.0
-        if: steps.run_tests.outputs.status != 'success'
-        with:
-          name: cypress-videos
-          path: cypress/videos
 
   sonarcloud:
     name: SonarCloud
@@ -63,15 +45,11 @@ jobs:
       DEPLOYED: ${{ secrets.DEPLOYED }}
 
     steps:
-      - name: Clone Repository
+      - name: Checkout
         uses: actions/checkout@v3.0.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3.4.1
-        if: github.event.repository.name == 'fou-web'
         with:
-          node-version: '14'
-          cache: 'yarn'
+          submodules: recursive
+          token: ${{ secrets.GIT_TOKEN }}
 
       - name: Checkout composite actions
         uses: actions/checkout@v3.0.2
@@ -79,14 +57,17 @@ jobs:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
 
+      - name: Setup node
+        uses: ./composite-actions/.github/workflows/actions/setup-node
+
       - name: Get yarn and NextJS cache
         uses: ./composite-actions/.github/workflows/actions/yarn-cache
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
       - name: Install yarn
-        run: yarn install --immutable-cache
-        env:
+        uses: ./composite-actions/.github/workflows/actions/yarn-install
+        with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
       # Will SonarCloud change to action@main ?
