@@ -1,5 +1,5 @@
 name: 'Setup node'
-description: 'If fou-wew -> setup node enviroment with version 14'
+description: 'If fou-web -> setup node enviroment with version 14'
   
 runs:
   using: "composite"
