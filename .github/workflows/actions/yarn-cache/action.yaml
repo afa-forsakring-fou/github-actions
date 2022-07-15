@@ -1,7 +1,7 @@
 name: 'Yarn and NextJS cache'
 description: 'Get stored cache for yarn and NextJS'
 inputs:
-  git-token: 
+  GIT_TOKEN: 
     description: 'GIT_TOKEN from secrets'
     required: true
 

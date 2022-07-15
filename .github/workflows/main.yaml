@@ -7,7 +7,9 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    if: "! startsWith(github.event.head_commit.message, '${{ secrets.DEPLOYED }}/${{ github.event.repository.name }}')"
+    if: "! startsWith(github.event.head_commit.message, '$DEPLOYED/${{ github.event.repository.name }}')"
+    env: 
+      DEPLOYED: ${{ secrets.DEPLOYED }}
 
     concurrency: 
       group: ${{ github.ref }}
@@ -37,7 +39,7 @@ jobs:
       - name: Get yarn and NextJS cache
         uses: ./composite-actions/.github/workflows/actions/yarn-cache
         with:
-          git-token: ${{ secrets.GIT_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
         
       - name: Install packages & build
         run: |
@@ -86,7 +88,9 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
-    if: "! startsWith(github.event.head_commit.message, '${{ secrets.DEPLOYED }}/${{ github.event.repository.name }}')"
+    if: "! startsWith(github.event.head_commit.message, '$DEPLOYED/${{ github.event.repository.name }}')"
+    env: 
+      DEPLOYED: ${{ secrets.DEPLOYED }}
 
     steps:
       - name: Clone Repository
@@ -108,7 +112,7 @@ jobs:
       - name: Get yarn and NextJS cache
         uses: ./composite-actions/.github/workflows/actions/yarn-cache
         with:
-          git-token: ${{ secrets.GIT_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
       - name: Install yarn
         run: yarn install --immutable-cache
