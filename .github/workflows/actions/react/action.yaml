@@ -20,12 +20,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-#  - name: Setup Node.js
-#    uses: actions/setup-node@v3.4.1
-#    if: github.event.repository.name == 'fou-web'
-#    with:
-#      node-version: '14'
-#      cache: 'yarn'
+  - name: Setup Node.js
+    uses: actions/setup-node@v3.4.1
+    if: github.event.repository.name == 'fou-web'
+    with:
+      node-version: '14'
+      cache: 'yarn'
       
   - name: Clean target
     shell: bash
@@ -50,7 +50,7 @@ runs:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
       NODE_ENV: production
       X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
-      HASURA_URL: ${{ inputs.X_HASURA_URL }}
+      HASURA_URL: ${{ inputs.HASURA_URL }}
 
   - name: Run tests (CI)
     shell: bash
@@ -64,4 +64,4 @@ runs:
       PERCY_TOKEN: ${{ inputs.PERCY_TOKEN }}
       CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
       X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
-      HASURA_URL: ${{ inputs.X_HASURA_URL }}
+      HASURA_URL: ${{ inputs.HASURA_URL }}
