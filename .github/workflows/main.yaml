@@ -17,50 +17,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3.0.2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3.4.1
-        if: github.event.repository.name == 'fou-web'
-        with:
-          node-version: '14'
-          cache: 'yarn'
-      
-      - name: Clean target
-        if: github.event.repository.name == 'fou-web'
-        run: yarn clean
-
       - name: Checkout composite actions
         uses: actions/checkout@v3.0.2
         with:
           repository: afa-forsakring-fou/github-actions
-          path: composite-actions
+          path: composite-actions      
 
-      - name: Get yarn and NextJS cache
-        uses: ./composite-actions/.github/workflows/actions/yarn-cache
+      - name: React steps
+        uses: ./composite-actions/.github/workflows/actions/react
         with:
-          git-token: ${{ secrets.GIT_TOKEN }}
-        
-      - name: Install packages & build
-        run: |
-          yarn install --immutable-cache
-          yarn build
-        env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-          NODE_ENV: production
-          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
+          HASURA_ADMIN_SECRET: ${{ secrets.HASURA_ADMIN_SECRET }}
           HASURA_URL: ${{ secrets.X_HASURA_URL }}
-
-      - name: Run tests (CI)
-        id: run_tests
-        run: |
-          echo "::set-output name=status::failure"
-          yarn test:ci
-          echo "::set-output name=status::success"
-        env:
-          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
-          HASURA_URL: ${{ secrets.X_HASURA_URL }}
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
       
       - name: Upload coverage data
         uses: actions/upload-artifact@v2

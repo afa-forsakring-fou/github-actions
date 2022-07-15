@@ -1,0 +1,69 @@
+name: 'React'
+description: 'React build and test steps'
+inputs:
+  GIT_TOKEN:
+    description: 'GIT_TOKEN from secrets'
+    required: true
+  HASURA_ADMIN_SECRET:
+    description: 'HASURA_ADMIN_SECRET from secrets'
+    required: true
+  HASURA_URL:
+    description: 'HASURA_URL from secrets'
+    required: true
+  CYPRESS_RECORD_KEY:
+    description: 'CYPRESS_RECORD_KEY from secrets'
+    required: true
+  PERCY_TOKEN:
+    description: 'PERCY_TOKEN from secrets'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Setup Node.js
+    uses: actions/setup-node@v3.4.1
+    if: github.event.repository.name == 'fou-web'
+    with:
+      node-version: '14'
+      cache: 'yarn'
+      
+  - name: Clean target
+    shell: bash
+    if: github.event.repository.name == 'fou-web'
+    run: yarn clean
+
+#  - name: Checkout composite actions
+#    uses: actions/checkout@v3.0.2
+#    with:
+#      repository: afa-forsakring-fou/github-actions
+#      path: composite-actions
+
+  - name: Get yarn and NextJS cache
+    uses: ./composite-actions/.github/workflows/actions/yarn-cache
+    with:
+      git-token: ${{ inputs.GIT_TOKEN }}
+        
+  - name: Install packages & build
+    shell: bash
+    run: |
+      yarn install --immutable-cache
+      yarn build
+    env:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+      NODE_ENV: production
+      X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
+      HASURA_URL: ${{ inputs.X_HASURA_URL }}
+
+  - name: Run tests (CI)
+    shell: bash
+    id: run_tests
+    run: |
+      echo "::set-output name=status::failure"
+      yarn test:ci
+      echo "::set-output name=status::success"
+    env:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+      PERCY_TOKEN: ${{ inputs.PERCY_TOKEN }}
+      CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
+      X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
+      HASURA_URL: ${{ inputs.X_HASURA_URL }}
