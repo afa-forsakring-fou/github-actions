@@ -58,7 +58,9 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
-    if: "! startsWith(github.event.head_commit.message, '${{ secrets.DEPLOYED }}/${{ github.event.repository.name }}')"
+    if: "! startsWith(github.event.head_commit.message, '$DEPLOYED/${{ github.event.repository.name }}')"
+    env: 
+      DEPLOYED: ${{ secrets.DEPLOYED }}
 
     steps:
       - name: Clone Repository
