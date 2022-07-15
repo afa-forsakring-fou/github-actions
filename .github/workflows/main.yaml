@@ -30,16 +30,31 @@ jobs:
         if: github.event.repository.name == 'fou-web'
         run: yarn clean
 
-      - name: Checkout composite actions
-        uses: actions/checkout@v3.0.2
-        with:
-          repository: afa-forsakring-fou/github-actions
-          path: composite-actions
-
-      - name: Get yarn and NextJS cache
-        uses: ./composite-actions/.github/workflows/actions/yarn-cache
-        with:
+      # https://github.com/actions/cache/blob/master/examples.md#node---yarn
+      - name: Get yarn cache directory path
+        shell: bash
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+        env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+      - name: Yarn cache
+        uses: actions/cache@v3.0.5
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # https://github.com/zeit/next.js/blob/master/errors/no-cache.md
+      - name: NextJS cache
+        uses: actions/cache@v3.0.5
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
         
       - name: Install packages & build
         run: |
