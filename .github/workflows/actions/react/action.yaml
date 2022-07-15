@@ -41,7 +41,7 @@ runs:
   - name: Get yarn and NextJS cache
     uses: ./composite-actions/.github/workflows/actions/yarn-cache
     with:
-      git-token: ${{ inputs.GIT_TOKEN }}
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
         
   - name: Install packages & build
     shell: bash

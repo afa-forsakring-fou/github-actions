@@ -82,7 +82,7 @@ jobs:
       - name: Get yarn and NextJS cache
         uses: ./composite-actions/.github/workflows/actions/yarn-cache
         with:
-          git-token: ${{ secrets.GIT_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
       - name: Install yarn
         run: yarn install --immutable-cache
