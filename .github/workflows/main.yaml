@@ -63,7 +63,7 @@ jobs:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           NODE_ENV: production
           X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
-          HASURA_URL: ${{ secrets.X_HASURA_URL }}
+          HASURA_URL: ${{ secrets.HASURA_URL }}
 
       - name: Run tests (CI)
         id: run_tests
