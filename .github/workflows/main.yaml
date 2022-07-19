@@ -6,7 +6,7 @@ on:
         type: string
       NODE_VERSION:
         required: false
-        default: "18"
+        default: "18.2.0"
         type: string
 
 name: Main Workflow
