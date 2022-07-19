@@ -38,7 +38,7 @@ jobs:
 
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
-        uses: ./composite-actions/.github/workflows/actions/react@no-node
+        uses: ./composite-actions/.github/workflows/actions/react
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           NODE_VERSION: ${{ inputs.NODE_VERSION }}
