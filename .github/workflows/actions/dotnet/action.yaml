@@ -1,0 +1,38 @@
+name: 'Dotnet'
+description: 'Dotnet build and test steps'
+inputs:
+  GIT_TOKEN:
+    description: 'GIT_TOKEN from secrets'
+    required: true
+
+runs:
+  using: "composite"
+  steps:  
+  - name: Setup dotnet
+    uses: ./composite-actions/.github/workflows/actions/dotnet/setup-dotnet
+    with:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+  
+  - name: Display dotnet version
+    shell: bash
+    run: dotnet --version
+
+  - name: Get dotnet cache
+    uses: ./composite-actions/.github/workflows/actions/dotnet/dotnet-cache
+
+  - name: Install dependencies
+    uses: ./composite-actions/.github/workflows/actions/dotnet/restore
+  
+  - name: Build
+    uses: ./composite-actions/.github/workflows/actions/dotnet/build
+  
+  - name: Test with the dotnet CLI
+    shell: bash
+    run: dotnet test --logger trx --results-directory "TestResults-6.0.x"
+  
+  - name: Upload dotnet test results
+    uses: actions/upload-artifact@v3.1.0
+    with:
+      name: dotnet-results-6.0.x
+      path: TestResults-6.0.x
+    if: ${{ always() }}

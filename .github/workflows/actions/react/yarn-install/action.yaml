@@ -1,0 +1,21 @@
+name: 'Install yarn'
+description: 'Install yarn with --immutable cache'
+inputs:
+  GIT_TOKEN:
+    description: 'GIT_TOKEN from secrets'
+    required: true
+  
+runs:
+  using: "composite"
+  steps:
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Install packages"
+
+  - name: Install packages
+    env: 
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+    shell: bash
+    run: |
+      yarn install --immutable-cache
