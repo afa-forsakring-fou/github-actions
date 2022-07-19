@@ -23,11 +23,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - name: Setup node
-    uses: ./composite-actions/.github/workflows/actions/react/setup-node
-    with:
-      NODE_VERSION: ${{ inputs.NODE_VERSION }}
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+#  - name: Setup node
+#    uses: ./composite-actions/.github/workflows/actions/react/setup-node
+#    with:
+#      NODE_VERSION: ${{ inputs.NODE_VERSION }}
+#      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
       
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
