@@ -1,0 +1,43 @@
+name: 'Sonarcloud react'
+description: 'React steps for sonarcloud'
+inputs:
+  GIT_TOKEN: 
+    description: 'GIT_TOKEN from secrets'
+    required: true
+  NODE_VERSION: 
+    description: 'Node version'
+    required: false
+  SONAR_TOKEN: 
+    description: 'SONAR_TOKEN from secrets'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Setup node
+    if: "${{ inputs.NODE_VERSION != '' }}"
+    uses: ./composite-actions/.github/workflows/actions/react/setup-node
+    with:
+      NODE_VERSION: ${{ inputs.NODE_VERSION }}
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+
+  - name: Get yarn and NextJS cache
+    uses: ./composite-actions/.github/workflows/actions/react/yarn-cache
+    with:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+      
+  - name: Install yarn
+    uses: ./composite-actions/.github/workflows/actions/react/yarn-install
+    with:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+  
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "SonarCloud Scan"
+
+  - name: SonarCloud Scan
+    uses: sonarsource/sonarcloud-github-action@v1.6
+    env:
+      GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      SONAR_TOKEN: ${{ inputs.SONAR_TOKEN }}

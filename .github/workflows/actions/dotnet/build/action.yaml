@@ -1,0 +1,14 @@
+name: 'Build'
+description: 'dotnet build'
+  
+runs:
+  using: "composite"
+  steps:
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Build"  
+
+  - name: Build
+    shell: bash
+    run: dotnet build

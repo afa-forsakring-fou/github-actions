@@ -1,0 +1,23 @@
+name: 'Echo step'
+description: 'Print step in bold intense green with lines over and under'
+inputs:
+  PRINT:
+    description: 'This will be printed'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Print step
+    shell: python
+    run: |
+      import os
+      green = '\033[1;92m'
+      horizontal_line = '\u2014' * 150
+      print(green+horizontal_line)
+      print()
+      print(green+os.environ['PRINT'].replace(r'\n', f'\n{green}'))
+      print()
+      print(green+horizontal_line)
+    env:
+      PRINT: ${{ inputs.PRINT }}

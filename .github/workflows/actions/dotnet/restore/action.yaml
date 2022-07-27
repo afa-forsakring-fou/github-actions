@@ -1,0 +1,14 @@
+name: 'Restore'
+description: 'Restore dependencies'
+  
+runs:
+  using: "composite"
+  steps:
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Install dependencies"
+
+  - name: Install dependencies
+    shell: bash
+    run: dotnet restore

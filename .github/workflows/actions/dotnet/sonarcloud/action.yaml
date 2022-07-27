@@ -1,0 +1,55 @@
+name: 'Sonarcloud dotnet'
+description: 'Dotnet steps for sonarcloud'
+inputs:
+  GIT_TOKEN: 
+    description: 'GIT_TOKEN from secrets'
+    required: true
+  SONAR_TOKEN: 
+    description: 'SONAR_TOKEN from secrets'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Setup dotnet
+    uses: ./composite-actions/.github/workflows/actions/dotnet/setup-dotnet
+    with:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+
+  - name: Get dotnet cache
+    uses: ./composite-actions/.github/workflows/actions/dotnet/dotnet-cache
+
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Install Sonarcloud"
+
+  - name: Install Sonarcloud
+    shell: bash
+    run: dotnet tool install --global dotnet-sonarscanner --version 5.4.0
+  
+  - name: Install dependencies
+    uses: ./composite-actions/.github/workflows/actions/dotnet/restore
+  
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Start SonarScan" 
+
+  - name: Start SonarScan
+    shell: bash
+    run: dotnet sonarscanner begin /o:afaforsakring /k:coterie:fou-admin /d:sonar.login=${{ inputs.SONAR_TOKEN }} /d:sonar.host.url=https://sonarcloud.io /d:sonar.exclusions=**/Domain/Storage/Migrations/*
+
+  - name: Build
+    uses: ./composite-actions/.github/workflows/actions/dotnet/build
+  
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "End SonarScan" 
+
+  - name: End SonarScan
+    shell: bash
+    run: dotnet sonarscanner end /d:sonar.login=${{ inputs.SONAR_TOKEN }}
+    env:
+      GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}  #maybe not needed?

@@ -1,0 +1,174 @@
+on:
+  workflow_call:
+    inputs:
+      FRAMEWORK:
+        required: true
+        type: string
+      NODE_VERSION:
+        required: false
+        type: string
+      MATRIX:
+        required: false
+        type: string
+        default: "1"
+
+name: Main Workflow
+
+jobs:
+  setup-matrix: # Setup matrix by input, for example: MATRIX=3 -> [1,2,3] and is used by matrix strategy in next job
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.setmatrix.outputs.matrix }}
+    steps:
+      - name: Set Dynamic Matrix
+        id: setmatrix
+        run: |
+          start="[" && ending="]"
+          for ((i = 1 ; i <= $RUNS ; i++)); do start+=${i}; if [ $i -ne $RUNS ]; then start+=","; fi; done;
+          start+=$ending && echo "::set-output name=matrix::$start"
+        env:
+          RUNS:  ${{ inputs.MATRIX }}
+
+  build-and-test:
+    needs: setup-matrix
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    concurrency: 
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+    
+    strategy:
+      matrix:
+        containers: ${{ fromJson(needs.setup-matrix.outputs.matrix) }} # Tied to env PERCY_PARALLEL_TOTAL in 'Run Tests (CI)'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.2
+        with:
+          submodules: recursive
+          token: ${{ secrets.GIT_TOKEN }}
+
+      - name: Checkout composite actions
+        uses: actions/checkout@v3.0.2
+        with:
+          repository: afa-forsakring-fou/github-actions
+          path: composite-actions
+
+      - name: Get env variables
+        run: |
+          export node_version="$(node --version)"
+          export yarn_version="$(yarn --version)"
+          export dotnet_version="$(dotnet --version)"
+          export versions="Node version: ${node_version} \nYarn version: ${yarn_version} \nDotnet version: ${dotnet_version}"
+          echo "VERSIONS=$versions" >> $GITHUB_ENV
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+      - name: Print env variables
+        uses: ./composite-actions/.github/workflows/actions/echo-step
+        with:
+          PRINT: ${{ env.VERSIONS }}
+
+      - name: React steps
+        if: "${{ inputs.FRAMEWORK == 'react' }}"
+        uses: ./composite-actions/.github/workflows/actions/react
+        with:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          NODE_VERSION: ${{ inputs.NODE_VERSION }}
+          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
+          HASURA_URL: ${{ secrets.HASURA_URL }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          MAIL: ${{ secrets.MAIL }}
+          MATRIX: ${{ inputs.MATRIX }}
+
+      - name: Dotnet steps
+        if: "${{ inputs.FRAMEWORK == 'dotnet' }}"
+        uses: ./composite-actions/.github/workflows/actions/dotnet
+        with:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.2
+        with:
+          submodules: recursive
+          token: ${{ secrets.GIT_TOKEN }}
+
+      - name: Checkout composite actions
+        uses: actions/checkout@v3.0.2
+        with:
+          repository: afa-forsakring-fou/github-actions
+          path: composite-actions
+
+      - name: React sonarcloud
+        if: "${{ inputs.FRAMEWORK == 'react' }}"
+        uses: ./composite-actions/.github/workflows/actions/react/sonarcloud
+        with:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          NODE_VERSION: ${{ inputs.NODE_VERSION }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Dotnet sonarcloud
+        if: "${{ inputs.FRAMEWORK == 'dotnet' }}"
+        uses: ./composite-actions/.github/workflows/actions/dotnet/sonarcloud
+        with:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build-to-gke:
+    name: Build and Deploy to GKE
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.2
+        with:
+          submodules: recursive
+          token: ${{ secrets.GIT_TOKEN }}
+
+      - name: Config git
+        run: |
+          git config --global user.name 'Github Actions'
+          git config --global user.email ''${{ secrets.MAIL }}''
+
+      # fou-web has three cache steps here 
+
+      - id: auth
+        uses: google-github-actions/auth@v0.8.0
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      # Setup gcloud CLI
+      - uses: google-github-actions/setup-gcloud@v0.5.1
+        with:
+          version: 350.0.0
+
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - name: Set up GKE + Docker
+        run: |
+          # Set up docker to authenticate
+          # via gcloud command-line tool.
+          gcloud auth configure-docker
+
+      # Set up kustomize (will kustomize change from /master/ to /main/ soon?)
+      - name: Set up Kustomize
+        run: |-
+          cd /usr/bin
+          curl -s "https://raw.githubusercontent.com/\
+          kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | sudo bash
+
+      # Build the Docker image, Publish it to the image repository, Commit the new tag reference, Push those commits
+      - name: Build
+        run: |
+          make env deploy_ci
+        env:
+          GIT_TOKEN: ${{secrets.GIT_TOKEN}}
+          GIT_USER: "GithubActions"
+          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}

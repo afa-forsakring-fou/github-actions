@@ -1,0 +1,25 @@
+name: 'Setup node'
+description: 'Setup node with input NODE_VERSION'
+inputs:
+  NODE_VERSION: 
+    description: 'Node version'
+    required: true
+  GIT_TOKEN: 
+    description: 'GIT_TOKEN from secrets'
+    required: true
+  
+runs:
+  using: "composite"
+  steps:
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Setup Node with version: ${{ inputs.NODE_VERSION }}"
+
+  - name: Setup Node.js
+    uses: actions/setup-node@v3.4.1
+    with:
+      node-version: ${{ inputs.NODE_VERSION }}
+      cache: 'yarn'
+    env:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }} # for .yarnrc.yaml

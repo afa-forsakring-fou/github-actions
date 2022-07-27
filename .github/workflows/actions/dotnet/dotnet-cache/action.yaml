@@ -1,0 +1,19 @@
+name: 'Dotnet cache'
+description: 'Get stored cache for dotnet'
+
+runs:
+  using: "composite"
+  steps:
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Look for cache"
+
+  - name: Look for cache
+    uses: actions/cache@v3.0.5
+    with:
+      path: ~/.nuget/packages
+      # Look to see if there is a cache hit for the corresponding requirements file
+      key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+      restore-keys: |
+        ${{ runner.os }}-nuget

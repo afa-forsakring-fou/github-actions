@@ -1,0 +1,22 @@
+name: 'Setup dotnet'
+description: 'Setup dotnet with version 6.0.x and nugets'
+inputs:
+  GIT_TOKEN:
+    description: 'GIT_TOKEN from secrets'
+    required: true
+  
+runs:
+  using: "composite"
+  steps:
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
+      PRINT: "Setup dotnet"
+
+  - name: Setup dotnet
+    uses: actions/setup-dotnet@v1
+    with:
+      dotnet-version: '6.0.x'
+      source-url: https://nuget.pkg.github.com/afa-forsakring-fou/index.json
+    env:
+      NUGET_AUTH_TOKEN: ${{ inputs.GIT_TOKEN }}
