@@ -4,7 +4,7 @@ description: 'If repo has our submodule then check for the skip annotation'
 runs:
   using: "composite"
   steps:
-  - name: Check if submodule and check for skip action
+  - name: Check if submodule and check for 'skip action'
     shell: bash
     run: |
       if ! [[ !$(git submodule status) ]]; then
