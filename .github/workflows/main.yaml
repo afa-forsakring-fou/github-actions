@@ -55,6 +55,9 @@ jobs:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
 
+      - name: Check for submodule and 'skip actions'
+        uses: ./composite-actions/.github/workflows/actions/submodule-check
+
       - name: Get env variables
         run: |
           export node_version="$(node --version)"

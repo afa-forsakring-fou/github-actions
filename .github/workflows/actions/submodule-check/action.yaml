@@ -1,0 +1,19 @@
+name: 'Submodule check'
+description: 'If repo has our submodule then check for the skip annotation'
+
+runs:
+  using: "composite"
+  steps:
+  - name: Check if submodule and check for 'skip action'
+    shell: bash
+    run: |
+      if ! [[ !$(git submodule status) ]]; then
+        exit 0
+      fi
+
+      cd shared-tools/makefiles
+      if ! [[ $(cat git.mk | grep "skip actions") ]]; then
+        RED="\033[0;31m"
+        printf "\n ${RED}Pull latest submodule!\n"
+        exit 1
+      fi
