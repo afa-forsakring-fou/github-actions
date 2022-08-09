@@ -108,6 +108,9 @@ jobs:
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
+          
+      - name: Check for submodule and 'skip actions'
+        uses: ./composite-actions/.github/workflows/actions/submodule-check
 
       - name: React sonarcloud
         if: "${{ inputs.FRAMEWORK == 'react' }}"
