@@ -17,7 +17,7 @@ runs:
         exit 1
       fi
 
-  - name: Print env variables
+  - name: Print error message
     if: failure() && steps.check-submodule.outcome != 'success'
     uses: ./composite-actions/.github/workflows/actions/error-step
     with:
