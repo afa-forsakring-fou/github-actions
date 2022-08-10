@@ -5,6 +5,7 @@ runs:
   using: "composite"
   steps:
   - name: Check if submodule and check for 'skip action'
+    id: check-submodule
     shell: bash
     run: |
       if ! [[ !$(git submodule status) ]]; then
@@ -13,7 +14,11 @@ runs:
 
       cd shared-tools/makefiles
       if ! [[ $(cat git.mk | grep "skip actions") ]]; then
-        RED="\033[0;31m"
-        printf "\n ${RED}Pull latest submodule!\n"
         exit 1
       fi
+
+  - name: Print error message
+    if: failure() && steps.check-submodule.outcome != 'success'
+    uses: ./composite-actions/.github/workflows/actions/error-step
+    with:
+      PRINT: "Pull latest submodule!"

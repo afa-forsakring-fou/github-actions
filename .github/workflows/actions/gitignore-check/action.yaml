@@ -1,0 +1,19 @@
+name: 'Gitignore check for gha-creds'
+description: 'Check for important line in .gitgnore to avoid check in of credentials in gke-build step'
+
+runs:
+  using: "composite"
+  steps:
+  - name: Check for gha-creds in .gitignore
+    id: check-gitignore
+    shell: bash
+    run: |
+      if [[ $(cat .gitignore | grep "gha-creds") ]]; then
+        exit 1
+      fi
+
+  - name: Print error message
+    if: failure() && steps.check-gitignore.outcome != 'success'
+    uses: ./composite-actions/.github/workflows/actions/error-step
+    with:
+      PRINT: "Add 'gha-creds-*' to .gitgnore!"

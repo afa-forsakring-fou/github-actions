@@ -55,6 +55,9 @@ jobs:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
 
+      - name: Check for gha-creds in .gitignore
+        uses: ./composite-actions/.github/workflows/actions/gitignore-check
+        
       - name: Check for submodule and 'skip actions'
         uses: ./composite-actions/.github/workflows/actions/submodule-check
 
@@ -108,6 +111,9 @@ jobs:
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
+      
+      - name: Check for gha-creds in .gitignore
+        uses: ./composite-actions/.github/workflows/actions/gitignore-check
           
       - name: Check for submodule and 'skip actions'
         uses: ./composite-actions/.github/workflows/actions/submodule-check
