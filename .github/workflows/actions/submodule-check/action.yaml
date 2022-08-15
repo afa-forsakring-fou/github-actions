@@ -8,7 +8,7 @@ runs:
     id: check-submodule
     shell: bash
     run: |
-      if ! [[ !$(git submodule status) ]]; then
+      if [[ ! $(git submodule status) ]]; then
         exit 0
       else
         cd shared-tools/makefiles
