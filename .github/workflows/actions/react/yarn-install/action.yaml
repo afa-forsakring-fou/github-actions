@@ -18,5 +18,4 @@ runs:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
     shell: bash
     run: |
-      node -v
       yarn install --immutable-cache
