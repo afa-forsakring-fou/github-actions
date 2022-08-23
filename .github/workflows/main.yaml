@@ -7,6 +7,7 @@ on:
       NODE_VERSION:
         required: false
         type: string
+        default: "16.16.0" #can be removed when they fixed bug: https://github.com/yarnpkg/berry/issues/4778
       MATRIX:
         required: false
         type: string
@@ -34,10 +35,10 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
 
-    concurrency: 
+    concurrency:
       group: ${{ github.ref }}
       cancel-in-progress: true
-    
+
     strategy:
       matrix:
         containers: ${{ fromJson(needs.setup-matrix.outputs.matrix) }} # Tied to env PERCY_PARALLEL_TOTAL in 'Run Tests (CI)'
@@ -57,7 +58,7 @@ jobs:
 
       - name: Check for gha-creds in .gitignore
         uses: ./composite-actions/.github/workflows/actions/gitignore-check
-        
+
       - name: Check for submodule and 'skip actions'
         uses: ./composite-actions/.github/workflows/actions/submodule-check
 
@@ -111,10 +112,10 @@ jobs:
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
-      
+
       - name: Check for gha-creds in .gitignore
         uses: ./composite-actions/.github/workflows/actions/gitignore-check
-          
+
       - name: Check for submodule and 'skip actions'
         uses: ./composite-actions/.github/workflows/actions/submodule-check
 
@@ -150,7 +151,7 @@ jobs:
           git config --global user.name 'Github Actions'
           git config --global user.email ''${{ secrets.MAIL }}''
 
-      # fou-web has three cache steps here 
+      # fou-web has three cache steps here
 
       - id: auth
         uses: google-github-actions/auth@v0.8.0
