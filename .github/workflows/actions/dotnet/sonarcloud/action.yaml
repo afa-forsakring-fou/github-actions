@@ -1,10 +1,10 @@
 name: 'Sonarcloud dotnet'
 description: 'Dotnet steps for sonarcloud'
 inputs:
-  GIT_TOKEN: 
+  GIT_TOKEN:
     description: 'GIT_TOKEN from secrets'
     required: true
-  SONAR_TOKEN: 
+  SONAR_TOKEN:
     description: 'SONAR_TOKEN from secrets'
     required: true
 
@@ -27,14 +27,14 @@ runs:
   - name: Install Sonarcloud
     shell: bash
     run: dotnet tool install --global dotnet-sonarscanner --version 5.4.0
-  
+
   - name: Install dependencies
     uses: ./composite-actions/.github/workflows/actions/dotnet/restore
-  
+
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
     with:
-      PRINT: "Start SonarScan" 
+      PRINT: "Start SonarScan"
 
   - name: Start SonarScan
     shell: bash
@@ -42,11 +42,11 @@ runs:
 
   - name: Build
     uses: ./composite-actions/.github/workflows/actions/dotnet/build
-  
+
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
     with:
-      PRINT: "End SonarScan" 
+      PRINT: "End SonarScan"
 
   - name: End SonarScan
     shell: bash

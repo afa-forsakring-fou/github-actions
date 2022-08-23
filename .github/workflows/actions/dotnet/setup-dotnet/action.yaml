@@ -4,7 +4,7 @@ inputs:
   GIT_TOKEN:
     description: 'GIT_TOKEN from secrets'
     required: true
-  
+
 runs:
   using: "composite"
   steps:

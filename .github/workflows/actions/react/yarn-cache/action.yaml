@@ -36,7 +36,7 @@ runs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-    
+
     - name: Echo step
       uses: ./composite-actions/.github/workflows/actions/echo-step
       with:
