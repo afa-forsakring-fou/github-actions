@@ -93,7 +93,7 @@ runs:
       PERCY_TOKEN: ${{ inputs.PERCY_TOKEN }}
       PERCY_PARALLEL_NONCE: ${{ github.sha }}
       PERCY_PARALLEL_TOTAL: ${{ inputs.MATRIX }}
-  
+
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
     with:

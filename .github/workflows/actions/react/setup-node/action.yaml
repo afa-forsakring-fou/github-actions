@@ -1,13 +1,13 @@
 name: 'Setup node'
 description: 'Setup node with input NODE_VERSION'
 inputs:
-  NODE_VERSION: 
+  NODE_VERSION:
     description: 'Node version'
     required: true
-  GIT_TOKEN: 
+  GIT_TOKEN:
     description: 'GIT_TOKEN from secrets'
     required: true
-  
+
 runs:
   using: "composite"
   steps:

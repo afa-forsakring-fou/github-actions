@@ -1,13 +1,13 @@
 name: 'Sonarcloud react'
 description: 'React steps for sonarcloud'
 inputs:
-  GIT_TOKEN: 
+  GIT_TOKEN:
     description: 'GIT_TOKEN from secrets'
     required: true
-  NODE_VERSION: 
+  NODE_VERSION:
     description: 'Node version'
     required: false
-  SONAR_TOKEN: 
+  SONAR_TOKEN:
     description: 'SONAR_TOKEN from secrets'
     required: true
 
@@ -25,12 +25,12 @@ runs:
     uses: ./composite-actions/.github/workflows/actions/react/yarn-cache
     with:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-      
+
   - name: Install yarn
     uses: ./composite-actions/.github/workflows/actions/react/yarn-install
     with:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-  
+
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
     with:
