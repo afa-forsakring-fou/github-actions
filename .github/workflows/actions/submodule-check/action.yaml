@@ -12,7 +12,7 @@ runs:
         exit 0
       else
         cd shared-tools/makefiles
-        if ! [[ $(cat git.mk | grep "skip actions") ]]; then
+        if ! [[ $(cat git.mk | grep "add k8s") ]]; then
           exit 1
         fi
       fi
