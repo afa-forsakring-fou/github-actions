@@ -82,9 +82,9 @@ runs:
     shell: bash
     id: run_tests
     run: |
-      echo "::set-output name=status::failure"
+      echo "status=failure" >> $GITHUB_OUTPUT
       yarn test:ci
-      echo "::set-output name=status::success"
+      echo "status=success" >> $GITHUB_OUTPUT
     env:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
       CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}

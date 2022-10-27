@@ -37,7 +37,7 @@ runs:
       PRINT: "SonarCloud Scan"
 
   - name: SonarCloud Scan
-    uses: sonarsource/sonarcloud-github-action@v1.6
+    uses: sonarsource/sonarcloud-github-action@v1.7
     env:
       GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       SONAR_TOKEN: ${{ inputs.SONAR_TOKEN }}
