@@ -28,7 +28,7 @@ jobs:
         run: |
           start="[" && ending="]"
           for ((i = 1 ; i <= $RUNS ; i++)); do start+=${i}; if [ $i -ne $RUNS ]; then start+=","; fi; done;
-          start+=$ending && echo "::set-output name=matrix::$start"
+          start+=$ending && echo "matrix=$start" >> $GITHUB_OUTPUT
         env:
           RUNS:  ${{ inputs.MATRIX }}
 
