@@ -31,7 +31,7 @@ runs:
     run: dotnet test --logger trx --results-directory "TestResults-6.0.x"
 
   - name: Upload dotnet test results
-    uses: actions/upload-artifact@v3.1.0
+    uses: actions/upload-artifact@v3.1.1
     with:
       name: dotnet-results-6.0.x
       path: TestResults-6.0.x

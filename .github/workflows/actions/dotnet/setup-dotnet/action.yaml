@@ -14,7 +14,7 @@ runs:
       PRINT: "Setup dotnet"
 
   - name: Setup dotnet
-    uses: actions/setup-dotnet@v1
+    uses: actions/setup-dotnet@v3.0.3
     with:
       dotnet-version: '6.0.x'
       source-url: https://nuget.pkg.github.com/afa-forsakring-fou/index.json
