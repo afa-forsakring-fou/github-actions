@@ -5,6 +5,8 @@ jobs:
   labelWhenApproved:
     name: Label when approved
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
       - name: Label when approved
         uses: pullreminders/label-when-approved-action@master
