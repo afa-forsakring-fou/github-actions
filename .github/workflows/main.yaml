@@ -48,13 +48,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.1.0
         with:
           submodules: recursive
           token: ${{ secrets.GIT_TOKEN }}
 
       - name: Checkout composite actions
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.1.0
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
@@ -106,13 +106,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.1.0
         with:
           submodules: recursive
           token: ${{ secrets.GIT_TOKEN }}
 
       - name: Checkout composite actions
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.1.0
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
@@ -146,7 +146,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.1.0
         with:
           submodules: recursive
           token: ${{ secrets.GIT_TOKEN }}
@@ -159,14 +159,14 @@ jobs:
       # fou-web has three cache steps here
 
       - id: auth
-        uses: google-github-actions/auth@v0.8.0
+        uses: google-github-actions/auth@v0.8.3
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@v0.5.1
+      - uses: google-github-actions/setup-gcloud@v0.6.2
         with:
-          version: 350.0.0
+          version: 407.0.0
 
       # Configure docker to use the gcloud command-line tool as a credential helper
       - name: Set up GKE + Docker
