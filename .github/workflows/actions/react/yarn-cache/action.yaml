@@ -18,7 +18,14 @@ runs:
       shell: bash
       id: yarn-cache-dir-path
       run: |
-        echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+        yarn_version=$(yarn -v)
+        first_letter_of_version=${yarn_version:0:1}
+        number=$((first_letter_of_version))
+        if (( "$number" < 2 )); then
+          echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+        else
+          echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+        fi
       env:
         GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
