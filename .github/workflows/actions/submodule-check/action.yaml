@@ -4,7 +4,7 @@ description: 'If repo has our submodule then check for the skip annotation'
 runs:
   using: "composite"
   steps:
-  - name: Check if submodule and check for 'database_update:'
+  - name: Check if submodule and check for 'database_revert:'
     id: check-submodule
     shell: bash
     run: |
@@ -12,7 +12,7 @@ runs:
         exit 0
       else
         cd shared-tools/makefiles
-        if ! [[ $(cat ef_migrations.mk | grep "database_update:") ]]; then
+        if ! [[ $(cat ef_migrations.mk | grep "database_revert:") ]]; then
           exit 1
         fi
       fi
