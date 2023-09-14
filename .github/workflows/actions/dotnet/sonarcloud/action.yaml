@@ -38,7 +38,7 @@ runs:
 
   - name: Start SonarScan
     shell: bash
-    run: dotnet sonarscanner begin /o:afaforsakring2 /k:coterie:fou-admin /d:sonar.login=${{ inputs.SONAR_TOKEN }} /d:sonar.host.url=https://sonarcloud.io /d:sonar.exclusions=**/Domain/Storage/Migrations/*
+    run: dotnet sonarscanner begin /o:afaforsakring /k:coterie:fou-admin /d:sonar.login=${{ inputs.SONAR_TOKEN }} /d:sonar.host.url=https://sonarcloud.io /d:sonar.exclusions=**/Domain/Storage/Migrations/*
 
   - name: Build
     uses: ./composite-actions/.github/workflows/actions/dotnet/build
