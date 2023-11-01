@@ -99,45 +99,6 @@ jobs:
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3.1.0
-        with:
-          submodules: recursive
-          token: ${{ secrets.GIT_TOKEN }}
-
-      - name: Checkout composite actions
-        uses: actions/checkout@v3.1.0
-        with:
-          repository: afa-forsakring-fou/github-actions
-          path: composite-actions
-
-      - name: Check for gha-creds in .gitignore
-        uses: ./composite-actions/.github/workflows/actions/gitignore-check
-
-      - name: Check for submodule and 'skip actions'
-        uses: ./composite-actions/.github/workflows/actions/submodule-check
-
-      - name: React sonarcloud
-        if: "${{ inputs.FRAMEWORK == 'react' }}"
-        uses: ./composite-actions/.github/workflows/actions/react/sonarcloud
-        with:
-          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-          NODE_VERSION: ${{ inputs.NODE_VERSION }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Dotnet sonarcloud
-        if: "${{ inputs.FRAMEWORK == 'dotnet' }}"
-        uses: ./composite-actions/.github/workflows/actions/dotnet/sonarcloud
-        with:
-          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
   build-to-gke:
     name: Build and Deploy to GKE
     runs-on: ubuntu-latest
