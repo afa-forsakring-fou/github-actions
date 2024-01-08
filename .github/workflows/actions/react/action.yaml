@@ -61,6 +61,16 @@ runs:
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
     with:
+      PRINT: "Lint"
+
+  - name: Lint
+    shell: bash
+    run: |
+      yarn lint
+
+  - name: Echo step
+    uses: ./composite-actions/.github/workflows/actions/echo-step
+    with:
       PRINT: "Build"
 
   - name: Build
