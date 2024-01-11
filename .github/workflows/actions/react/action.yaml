@@ -67,6 +67,8 @@ runs:
     shell: bash
     run: |
       yarn lint
+    env:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
