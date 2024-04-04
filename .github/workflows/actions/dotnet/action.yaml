@@ -4,7 +4,9 @@ inputs:
   GIT_TOKEN:
     description: 'GIT_TOKEN from secrets'
     required: true
-
+  AZD_NUGET_FEED_TOKEN:
+    description: 'Azure devops token from secrets'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -22,6 +24,9 @@ runs:
 
   - name: Install dependencies
     uses: ./composite-actions/.github/workflows/actions/dotnet/restore
+    with:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+      AZD_NUGET_FEED_TOKEN: ${{ inputs.AZD_NUGET_FEED_TOKEN }}
 
   - name: Build
     uses: ./composite-actions/.github/workflows/actions/dotnet/build
