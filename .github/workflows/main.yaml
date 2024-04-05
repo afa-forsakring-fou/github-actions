@@ -151,4 +151,5 @@ jobs:
         env:
           GIT_TOKEN: ${{secrets.GIT_TOKEN}}
           GIT_USER: "GithubActions"
+          AZD_NUGET_FEED_TOKEN: ${{ secrets.AZD_NUGET_FEED_TOKEN }}
           X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
