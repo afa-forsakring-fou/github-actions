@@ -98,6 +98,7 @@ jobs:
         uses: ./composite-actions/.github/workflows/actions/dotnet
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          AZD_NUGET_FEED_TOKEN: ${{ secrets.AZD_NUGET_FEED_TOKEN }}
 
   build-to-gke:
     name: Build and Deploy to GKE

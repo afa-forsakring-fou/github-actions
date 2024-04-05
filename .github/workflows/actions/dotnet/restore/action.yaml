@@ -1,5 +1,12 @@
 name: 'Restore'
 description: 'Restore dependencies'
+inputs:
+  GIT_TOKEN:
+    description: 'GIT_TOKEN from secrets'
+    required: true
+  AZD_NUGET_FEED_TOKEN:
+    description: 'Azure devops token from secrets'
+    required: true
 
 runs:
   using: "composite"
@@ -12,3 +19,6 @@ runs:
   - name: Install dependencies
     shell: bash
     run: dotnet restore
+    env:
+      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+      AZD_NUGET_FEED_TOKEN: ${{ inputs.AZD_NUGET_FEED_TOKEN }}
