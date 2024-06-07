@@ -22,23 +22,36 @@ runs:
       git config --global user.name 'Github Actions'
       git config --global user.email ''${{ inputs.MAIL }}''
 
-  - run: yarn config set version-git-tag true
+  - name: Get yarn version
     shell: bash
+    id: yarn-version
+    run: |
+      yarn_version=$(yarn -v)
+      first_letter_of_version=${yarn_version:0:1}
+      echo "yarn_version=$first_letter_of_version" >> $GITHUB_OUTPUT
 
-  - run: yarn config set version-tag-prefix "v"
-    shell: bash
-
-  - run: yarn config set version-git-message "Update to version v%s [skip actions]"
-    shell: bash
-
-  - run: yarn version --patch
-    shell: bash
-
-  - run: yarn publish
-    shell: bash
+  - name: Yarn publish (legacy)
+    if: ${{ steps.yarn-version.outputs.yarn_version == "1" }}
+    run: |
+      yarn config set version-git-tag true
+      yarn config set version-tag-prefix "v"
+      yarn config set version-git-message "Update to version v%s [skip actions]"
+      yarn version --patch
+      yarn publish
+      git push
     env:
       NPM_AUTH_TOKEN: ${{ inputs.GIT_TOKEN }}
 
-  - name: Git push version update
-    shell: bash
-    run: git push
+  - name: Yarn publish
+    if: ${{ steps.yarn-version.outputs.yarn_version != "1" }}
+    run: |
+      yarn version patch
+      VERSION="v$(cat package.json | jq -r .version)"
+      yarn npm publish
+      git tag "$VERSION"
+      git add package.json
+      git commit -m "Update to version $VERSION"
+      git push origin tag "$VERSION"
+      git push
+    env:
+      NPM_AUTH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
