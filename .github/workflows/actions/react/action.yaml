@@ -141,10 +141,3 @@ runs:
     with:
       name: cypress-videos
       path: cypress/videos
-
-  - name: Publish package
-    uses: ./composite-actions/.github/workflows/actions/react/yarn-publish
-    if: github.event.repository.name == 'component-library' && github.ref == 'refs/heads/main'
-    with:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-      MAIL: ${{ inputs.MAIL }}
