@@ -90,7 +90,6 @@ jobs:
           X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
           HASURA_URL: ${{ secrets.HASURA_URL }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           MAIL: ${{ secrets.MAIL }}
           MATRIX: ${{ inputs.MATRIX }}
 

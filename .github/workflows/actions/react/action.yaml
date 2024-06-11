@@ -16,9 +16,6 @@ inputs:
   CYPRESS_RECORD_KEY:
     description: 'CYPRESS_RECORD_KEY from secrets'
     required: true
-  PERCY_TOKEN:
-    description: 'PERCY_TOKEN from secrets'
-    required: true
   MAIL:
     description: 'Mail from secrets'
     required: false
@@ -102,7 +99,6 @@ runs:
       CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
       X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
       HASURA_URL: ${{ inputs.HASURA_URL }}
-      PERCY_TOKEN: ${{ inputs.PERCY_TOKEN }}
       PERCY_PARALLEL_NONCE: ${{ github.sha }}
       PERCY_PARALLEL_TOTAL: ${{ inputs.MATRIX }}
 
