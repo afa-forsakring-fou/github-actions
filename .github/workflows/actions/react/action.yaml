@@ -50,11 +50,6 @@ runs:
     with:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
-  - name: Install yarn
-    uses: ./composite-actions/.github/workflows/actions/react/yarn-install
-    with:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
     with:
