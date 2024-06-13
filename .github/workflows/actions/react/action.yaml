@@ -94,8 +94,6 @@ runs:
       CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
       X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
       HASURA_URL: ${{ inputs.HASURA_URL }}
-      PERCY_PARALLEL_NONCE: ${{ github.sha }}
-      PERCY_PARALLEL_TOTAL: ${{ inputs.MATRIX }}
 
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step

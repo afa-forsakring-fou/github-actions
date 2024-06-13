@@ -44,7 +44,7 @@ jobs:
 
     strategy:
       matrix:
-        containers: ${{ fromJson(needs.setup-matrix.outputs.matrix) }} # Tied to env PERCY_PARALLEL_TOTAL in 'Run Tests (CI)'
+        containers: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout
