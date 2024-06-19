@@ -16,9 +16,6 @@ inputs:
   CYPRESS_RECORD_KEY:
     description: 'CYPRESS_RECORD_KEY from secrets'
     required: true
-  PERCY_TOKEN:
-    description: 'PERCY_TOKEN from secrets'
-    required: true
   MAIL:
     description: 'Mail from secrets'
     required: false
@@ -50,11 +47,6 @@ runs:
 
   - name: Get yarn and NextJS cache
     uses: ./composite-actions/.github/workflows/actions/react/yarn-cache
-    with:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-
-  - name: Install yarn
-    uses: ./composite-actions/.github/workflows/actions/react/yarn-install
     with:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
@@ -102,9 +94,6 @@ runs:
       CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
       X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
       HASURA_URL: ${{ inputs.HASURA_URL }}
-      PERCY_TOKEN: ${{ inputs.PERCY_TOKEN }}
-      PERCY_PARALLEL_NONCE: ${{ github.sha }}
-      PERCY_PARALLEL_TOTAL: ${{ inputs.MATRIX }}
 
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
@@ -112,7 +101,7 @@ runs:
       PRINT: "Upload coverage data"
 
   - name: Upload coverage data
-    uses: actions/upload-artifact@v3.1.1
+    uses: actions/upload-artifact@v4
     if: steps.run_tests.outputs.status == 'success'
     with:
       name: coverage
@@ -124,7 +113,7 @@ runs:
       PRINT: "Upload screenshots"
 
   - name: Upload screenshots
-    uses: actions/upload-artifact@v3.1.1
+    uses: actions/upload-artifact@v4
     if: steps.run_tests.outputs.status != 'success'
     with:
       name: cypress-screenshots
@@ -136,15 +125,8 @@ runs:
       PRINT: "Upload videos"
 
   - name: Upload videos
-    uses: actions/upload-artifact@v3.1.1
+    uses: actions/upload-artifact@v4
     if: steps.run_tests.outputs.status != 'success'
     with:
       name: cypress-videos
       path: cypress/videos
-
-  - name: Publish package
-    uses: ./composite-actions/.github/workflows/actions/react/yarn-publish
-    if: github.event.repository.name == 'component-library' && github.ref == 'refs/heads/main'
-    with:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-      MAIL: ${{ inputs.MAIL }}

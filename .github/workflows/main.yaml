@@ -7,7 +7,7 @@ on:
       NODE_VERSION:
         required: false
         type: string
-        default: "16.16.0" #can be removed when they fixed bug: https://github.com/yarnpkg/berry/issues/4778
+        default: "20.13.1"
       MATRIX:
         required: false
         type: string
@@ -44,20 +44,21 @@ jobs:
 
     strategy:
       matrix:
-        containers: ${{ fromJson(needs.setup-matrix.outputs.matrix) }} # Tied to env PERCY_PARALLEL_TOTAL in 'Run Tests (CI)'
+        containers: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GIT_TOKEN }}
 
       - name: Checkout composite actions
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
+          ref: upgrade-versions
 
       - name: Check for gha-creds in .gitignore
         uses: ./composite-actions/.github/workflows/actions/gitignore-check
@@ -89,7 +90,6 @@ jobs:
           X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
           HASURA_URL: ${{ secrets.HASURA_URL }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           MAIL: ${{ secrets.MAIL }}
           MATRIX: ${{ inputs.MATRIX }}
 
@@ -108,7 +108,7 @@ jobs:
     if: github.ref == 'refs/heads/dev'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GIT_TOKEN }}
@@ -121,12 +121,12 @@ jobs:
       # fou-web has three cache steps here
 
       - id: auth
-        uses: google-github-actions/auth@v0.8.3
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@v1
+      - uses: google-github-actions/setup-gcloud@v2
         with:
           version: 407.0.0
 

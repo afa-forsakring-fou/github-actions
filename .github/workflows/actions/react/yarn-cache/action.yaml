@@ -32,18 +32,18 @@ runs:
     - name: Echo step
       uses: ./composite-actions/.github/workflows/actions/echo-step
       with:
-        PRINT: "Yarn cache"
+        PRINT: "Restore Yarn cache"
 
-    - name: Yarn cache
-      uses: actions/cache@v3.0.11
-      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-      env:
-        GIT_TOKEN: ${{ inputs.GIT_TOKEN }} #maybe not needed?
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
       with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+        PRINT: "Yarn install"
+
+    - name: Yarn install
+      shell: bash
+      run: yarn install
+      env:
+        GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
     - name: Echo step
       uses: ./composite-actions/.github/workflows/actions/echo-step
@@ -52,7 +52,7 @@ runs:
 
     # https://github.com/zeit/next.js/blob/master/errors/no-cache.md
     - name: NextJS cache
-      uses: actions/cache@v3.0.11
+      uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/.next/cache
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
