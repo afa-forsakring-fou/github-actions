@@ -65,6 +65,7 @@ jobs:
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
+          ref: corepack-enable
 
       - name: Check for gha-creds in .gitignore
         uses: ./composite-actions/.github/workflows/actions/gitignore-check
