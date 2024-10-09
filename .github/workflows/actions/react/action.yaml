@@ -23,16 +23,22 @@ inputs:
     description: 'MATRIX (runs) from input'
     required: false
     default: "1"
+  COREPACK_ENABLE:
+    description: "Force run 'corepack enable' in setup-node"
+    required: false
+    type: boolean
+    default: false
 
 runs:
   using: "composite"
   steps:
   - name: Setup node
     if: "${{ inputs.NODE_VERSION != '' }}"
-    uses: ./composite-actions/.github/workflows/actions/react/setup-node
+    uses: ./composite-actions/.github/workflows/actions/react/setup-node@corepack-enable
     with:
       NODE_VERSION: ${{ inputs.NODE_VERSION }}
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+      COREPACK_ENABLE: ${{ inputs.COREPACK_ENABLE }}
 
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
