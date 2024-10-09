@@ -89,7 +89,7 @@ jobs:
 
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
-        uses: ./composite-actions/.github/workflows/actions/react
+        uses: ./composite-actions/.github/workflows/actions/react@corepack-enable
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           NODE_VERSION: ${{ inputs.NODE_VERSION }}
