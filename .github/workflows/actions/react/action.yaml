@@ -34,7 +34,7 @@ runs:
   steps:
   - name: Setup node
     if: "${{ inputs.NODE_VERSION != '' }}"
-    uses: ./composite-actions/.github/workflows/actions/react/setup-node@corepack-enable
+    uses: ./composite-actions/.github/workflows/actions/react/setup-node
     with:
       NODE_VERSION: ${{ inputs.NODE_VERSION }}
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
