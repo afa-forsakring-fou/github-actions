@@ -52,8 +52,6 @@ jobs:
         containers: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
 
     steps:
-      - name: Test
-        run: "echo ON A BRANCH"
       - name: Checkout
         uses: actions/checkout@v4
         with:
