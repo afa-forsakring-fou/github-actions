@@ -7,6 +7,11 @@ inputs:
   GIT_TOKEN:
     description: 'GIT_TOKEN from secrets'
     required: true
+  COREPACK_ENABLE:
+    description: "Force run 'corepack enable' in setup-node"
+    required: false
+    type: boolean
+    default: false
 
 runs:
   using: "composite"
@@ -15,6 +20,11 @@ runs:
     uses: ./composite-actions/.github/workflows/actions/echo-step
     with:
       PRINT: "Setup Node with version: ${{ inputs.NODE_VERSION }}"
+
+  - name: Corepack enable
+    shell: bash
+    run: corepack enable
+    if: ${{ inputs.COREPACK_ENABLE }}
 
   - name: Setup Node.js
     uses: actions/setup-node@v4
