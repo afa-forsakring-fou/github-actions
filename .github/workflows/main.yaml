@@ -65,6 +65,7 @@ jobs:
         with:
           repository: afa-forsakring-fou/github-actions
           path: composite-actions
+          ref: corepack-enable
 
       - name: Check for gha-creds in .gitignore
         uses: ./composite-actions/.github/workflows/actions/gitignore-check
@@ -89,7 +90,7 @@ jobs:
 
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
-        uses: ./composite-actions/.github/workflows/actions/react@corepack-enable
+        uses: ./composite-actions/.github/workflows/actions/react
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           NODE_VERSION: ${{ inputs.NODE_VERSION }}
