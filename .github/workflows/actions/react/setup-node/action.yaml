@@ -22,6 +22,7 @@ runs:
       PRINT: "Setup Node with version: ${{ inputs.NODE_VERSION }}"
 
   - name: Corepack enable
+    shell: bash
     run: corepack enable
     if: ${{ inputs.COREPACK_ENABLE }}
 
