@@ -132,11 +132,12 @@ jobs:
       - name: LOL
         run: ls
         shell: bash
+        working-directory: ${{ github.workspace }}/composite-actions
 
       - name: Container Scan
         run: bash ./scanimages.sh
-        working-directory: ${{ github.workspace }}
-        
+        working-directory: ${{ github.workspace }}/composite-actions
+
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
         uses: ./composite-actions/.github/workflows/actions/react
