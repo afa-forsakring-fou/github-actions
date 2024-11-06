@@ -125,14 +125,29 @@ jobs:
       #     echo "HIGH: $HIGH"
       #     echo "MEDIUM: $MEDIUM"
       #     echo "LOW: $LOW"
-      - name: Add GITHUB run path
-        run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-        shell: bash
+      # - name: Add GITHUB run path
+      #   run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      #   shell: bash
 
       - name: LOL
         run: ls
         shell: bash
         working-directory: ${{ github.workspace }}/composite-actions
+
+      - name: LOL2
+        run: ls
+        shell: bash
+        working-directory: ${{ github.workspace }}/composite-actions/.github/
+
+      - name: LOL3
+        run: ls
+        shell: bash
+        working-directory: ${{ github.workspace }}/composite-actions/.github/workflows
+
+      - name: LOL4
+        run: ls
+        shell: bash
+        working-directory: ${{ github.workspace }}/composite-actions/.github/workflows/action
 
       - name: Container Scan
         run: bash ./scanimages.sh
