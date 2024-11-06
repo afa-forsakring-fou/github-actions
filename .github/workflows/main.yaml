@@ -41,6 +41,8 @@ jobs:
     needs: setup-matrix
     name: Build and test
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     timeout-minutes: 15
 
     concurrency:
@@ -129,6 +131,19 @@ jobs:
         working-directory: ${{ github.workspace }}/composite-actions
         run: |
           cat scanResults
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+          working-directory: ${{ github.workspace }}/composite-actions
+          message: |
+            **Hello**
+            🌏
+            !
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message-path: |
+            scanResults
 
       - name: Hello world
         uses: actions/github-script@v7
