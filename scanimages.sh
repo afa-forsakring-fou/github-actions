@@ -18,6 +18,6 @@ echo "HIGH: $HIGH"
 echo "MEDIUM: $MEDIUM"
 echo "LOW: $LOW"
 
-echo "scanResults=$scanResults" >>$GITHUB_OUTPUT
+echo "scanResults=$(cat $scanResults)" >>$GITHUB_OUTPUT
 
-echo "scanResults=$scanResults" >>$GITHUB_ENV
+echo "scanResults=$(cat $scanResults)" >>$GITHUB_ENV
