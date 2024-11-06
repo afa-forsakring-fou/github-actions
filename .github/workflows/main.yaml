@@ -145,11 +145,6 @@ jobs:
         shell: bash
         working-directory: ${{ github.workspace }}/composite-actions/.github/workflows
 
-      - name: LOL4
-        run: ls
-        shell: bash
-        working-directory: ${{ github.workspace }}/composite-actions/.github/workflows/action
-
       - name: Container Scan
         run: bash ./scanimages.sh
         working-directory: ${{ github.workspace }}/composite-actions
