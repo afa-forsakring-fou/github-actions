@@ -6,7 +6,7 @@ containerTag="eu.gcr.io/fou-delivery/fou-admin-web:f0d2cdab8077c8b9d33208fc7392f
 gcloud artifacts docker images scan --remote --format='value(response.scan)' "$containerTag" >scan_id.txt
 gcloud artifacts docker images list-vulnerabilities "$(cat scan_id.txt)" --format="$metaDataTableFormat" >"$scanResults"
 echo "Here are the scan results"
-cat "$scanResults"
+cat $scanResults
 
 CRITICAL=$(grep -c "${vulnerabilitySeverityRating[0]}" <"$scanResults")
 HIGH=$(grep -c "${vulnerabilitySeverityRating[1]}" <"$scanResults")
@@ -18,6 +18,6 @@ echo "HIGH: $HIGH"
 echo "MEDIUM: $MEDIUM"
 echo "LOW: $LOW"
 
-echo "scanResults=$(cat $scanResults)" >>$GITHUB_OUTPUT
+echo "scanResults="$(cat $scanResults)"" >>$GITHUB_OUTPUT
 
-echo "scanResults=$(cat $scanResults)" >>$GITHUB_ENV
+echo "scanResults="$(cat $scanResults)"" >>$GITHUB_ENV
