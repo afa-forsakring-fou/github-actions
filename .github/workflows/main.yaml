@@ -135,12 +135,14 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           working-directory: ${{ github.workspace }}/composite-actions
+        env:
+          COMMENT_BODY: "${{ steps.scan.outputs.scanResults }}"
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: cat scanResults
+              body: process.env.COMMENT_BODY
             })
 
       - name: React steps
