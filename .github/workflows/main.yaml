@@ -142,6 +142,7 @@ jobs:
 
       - uses: mshick/add-pr-comment@v2
         with:
+          working-directory: ${{ github.workspace }}/composite-actions
           message-path: |
             scanResults
 
