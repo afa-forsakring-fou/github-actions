@@ -17,3 +17,5 @@ echo "CRITICAL: $CRITICAL"
 echo "HIGH: $HIGH"
 echo "MEDIUM: $MEDIUM"
 echo "LOW: $LOW"
+
+echo "scanResults=$scanResults" >>$GITHUB_OUTPUT
