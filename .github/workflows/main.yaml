@@ -129,10 +129,14 @@ jobs:
         run: echo "${{ github.action_path }}" >> $GITHUB_PATH
         shell: bash
 
-      - name: Container Scan
-        run: bash ./scanimages.sh
+      - name: LOL
+        run: ls
         shell: bash
 
+      - name: Container Scan
+        run: bash ./scanimages.sh
+        working-directory: ${{ github.workspace }}
+        
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
         uses: ./composite-actions/.github/workflows/actions/react
