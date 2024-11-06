@@ -146,8 +146,23 @@ jobs:
         working-directory: ${{ github.workspace }}/composite-actions/.github/workflows
 
       - name: Container Scan
+        env: { $GITHUB_ENV }
         run: bash ./scanimages.sh
         working-directory: ${{ github.workspace }}/composite-actions
+
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "FOO=$(git status)" >> $GITHUB_ENV
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.FOO }}"
+
+      - name: Use the value
+        id: step_three
+        run: |
+          echo "${{ env.scanResults }}"
 
       - name: Hello world
         uses: actions/github-script@v7

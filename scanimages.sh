@@ -19,3 +19,5 @@ echo "MEDIUM: $MEDIUM"
 echo "LOW: $LOW"
 
 echo "scanResults=$scanResults" >>$GITHUB_OUTPUT
+
+echo "scanResults=$scanResults" >>$GITHUB_ENV
