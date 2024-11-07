@@ -134,17 +134,13 @@ jobs:
 
       - uses: mshick/add-pr-comment@v2
         with:
-          working-directory: ${{ github.workspace }}/composite-actions
-          message: |
-            **Hello**
-            🌏
-            !
+          message: ${{ env.scanResults }}
 
       - uses: mshick/add-pr-comment@v2
         with:
           working-directory: ${{ github.workspace }}/composite-actions
           message-path: |
-            scanResults
+            ${{ github.workspace }}/composite-actions/scanResults
 
       - name: Hello world
         uses: actions/github-script@v7
