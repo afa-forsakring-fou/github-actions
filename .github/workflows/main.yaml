@@ -134,28 +134,28 @@ jobs:
 
       - uses: mshick/add-pr-comment@v2
         with:
-          message: ${{ env.scanResults }}
+          message: "${{ env.scanResults }}"
 
-      - uses: mshick/add-pr-comment@v2
-        with:
-          working-directory: ${{ github.workspace }}/composite-actions
-          message-path: |
-            ${{ github.workspace }}/composite-actions/scanResults
+      # - uses: mshick/add-pr-comment@v2
+      #   with:
+      #     working-directory: ${{ github.workspace }}/composite-actions
+      #     message-path: |
+      #       ${{ github.workspace }}/composite-actions/scanResults
 
-      - name: Hello world
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          working-directory: ${{ github.workspace }}/composite-actions
-        env:
-          COMMENT_BODY: "${{ steps.scan.outputs.scanResults }}"
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: process.env.COMMENT_BODY
-            })
+      # - name: Hello world
+      #   uses: actions/github-script@v7
+      #   with:
+      #     github-token: ${{secrets.GITHUB_TOKEN}}
+      #     working-directory: ${{ github.workspace }}/composite-actions
+      #   env:
+      #     COMMENT_BODY: "${{ steps.scan.outputs.scanResults }}"
+      #     script: |
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: process.env.COMMENT_BODY
+      #       })
 
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
