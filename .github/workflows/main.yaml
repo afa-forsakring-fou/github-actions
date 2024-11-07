@@ -233,6 +233,11 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
 
+      - name: Set IMAGE Tag environment variable
+        run: |
+          eval "$(make EXPORT_IMAGE_TAG)"
+          echo $IMAGE_TAG >> $GITHUB_ENV
+
       # Build the Docker image, Publish it to the image repository, Commit the new tag reference, Push those commits
       - name: Build
         run: |
