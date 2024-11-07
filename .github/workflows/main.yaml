@@ -88,32 +88,32 @@ jobs:
         with:
           PRINT: ${{ env.VERSIONS }}
 
-      - id: auth
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      # - id: auth
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
 
-      # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@v2
-        with:
-          version: 499.0.0
-          install_components: "local-extract"
+      # # Setup gcloud CLI
+      # - uses: google-github-actions/setup-gcloud@v2
+      #   with:
+      #     version: 499.0.0
+      #     install_components: "local-extract"
 
-      # Configure docker to use the gcloud command-line tool as a credential helper
-      - name: Set up GKE + Docker
-        run: |
-          # Set up docker to authenticate
-          # via gcloud command-line tool.
-          gcloud auth configure-docker
+      # # Configure docker to use the gcloud command-line tool as a credential helper
+      # - name: Set up GKE + Docker
+      #   run: |
+      #     # Set up docker to authenticate
+      #     # via gcloud command-line tool.
+      #     gcloud auth configure-docker
 
-      - name: Container Scan
-        id: scan
-        run: bash ./scanimages.sh
-        working-directory: ${{ github.workspace }}/composite-actions
+      # - name: Container Scan
+      #   id: scan
+      #   run: bash ./scanimages.sh
+      #   working-directory: ${{ github.workspace }}/composite-actions
 
-      - uses: mshick/add-pr-comment@v2
-        with:
-          message: "${{ env.scanResults }}"
+      # - uses: mshick/add-pr-comment@v2
+      #   with:
+      #     message: "${{ env.scanResults }}"
 
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
@@ -232,6 +232,16 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+
+      # Build the Docker image, Publish it to the image repository, Commit the new tag reference, Push those commits
+      - name: Build
+        run: |
+          make build
+        env:
+          GIT_TOKEN: ${{secrets.GIT_TOKEN}}
+          GIT_USER: "GithubActions"
+          AZD_NUGET_FEED_TOKEN: ${{ secrets.AZD_NUGET_FEED_TOKEN }}
+          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v2
