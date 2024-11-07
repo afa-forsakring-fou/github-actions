@@ -18,7 +18,7 @@ echo "HIGH: $HIGH"
 echo "MEDIUM: $MEDIUM"
 echo "LOW: $LOW"
 
-tja=$(<$scanResults)
+resultsVar=$(<$scanResults)
 echo "scanResults<<EOF" >>$GITHUB_ENV
 echo "" >>$GITHUB_ENV
 echo "<pre>" >>$GITHUB_ENV
