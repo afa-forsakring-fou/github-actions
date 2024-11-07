@@ -197,60 +197,60 @@ jobs:
           X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
 
   create-and-scan-docker-image:
-      needs: setup-matrix
-      name: Create and scan docker image
-      runs-on: ubuntu-latest
-      permissions:
-        pull-requests: write
-      timeout-minutes: 15
+    needs: setup-matrix
+    name: Create and scan docker image
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    timeout-minutes: 15
 
-      concurrency:
-        group: ${{ github.workflow }}-${{ github.ref }}
-        cancel-in-progress: true
+    concurrency:
+      group: ${{ github.job }}-${{ github.ref }}
+      cancel-in-progress: true
 
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-          with:
-            submodules: recursive
-            token: ${{ secrets.GIT_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GIT_TOKEN }}
 
-        - name: Checkout composite actions
-          uses: actions/checkout@v4
-          with:
-            repository: afa-forsakring-fou/github-actions
-            path: composite-actions
-            ref: hjalun/code-scan
+      - name: Checkout composite actions
+        uses: actions/checkout@v4
+        with:
+          repository: afa-forsakring-fou/github-actions
+          path: composite-actions
+          ref: hjalun/code-scan
 
-        - name: Check for gha-creds in .gitignore
-          uses: ./composite-actions/.github/workflows/actions/gitignore-check
+      - name: Check for gha-creds in .gitignore
+        uses: ./composite-actions/.github/workflows/actions/gitignore-check
 
-        - name: Check for submodule and 'skip actions'
-          uses: ./composite-actions/.github/workflows/actions/submodule-check
+      - name: Check for submodule and 'skip actions'
+        uses: ./composite-actions/.github/workflows/actions/submodule-check
 
-        - id: auth
-          uses: google-github-actions/auth@v2
-          with:
-            credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
 
-        # Setup gcloud CLI
-        - uses: google-github-actions/setup-gcloud@v2
-          with:
-            version: 499.0.0
-            install_components: "local-extract"
+      # Setup gcloud CLI
+      - uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: 499.0.0
+          install_components: "local-extract"
 
-        # Configure docker to use the gcloud command-line tool as a credential helper
-        - name: Set up GKE + Docker
-          run: |
-            # Set up docker to authenticate
-            # via gcloud command-line tool.
-            gcloud auth configure-docker
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - name: Set up GKE + Docker
+        run: |
+          # Set up docker to authenticate
+          # via gcloud command-line tool.
+          gcloud auth configure-docker
 
-        - name: Container Scan
-          id: scan
-          run: bash ./scanimages.sh
-          working-directory: ${{ github.workspace }}/composite-actions
+      - name: Container Scan
+        id: scan
+        run: bash ./scanimages.sh
+        working-directory: ${{ github.workspace }}/composite-actions
 
-        - uses: mshick/add-pr-comment@v2
-          with:
-            message: "${{ env.scanResults }}"
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: "${{ env.scanResults }}"
