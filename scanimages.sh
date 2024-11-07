@@ -23,6 +23,7 @@ hej="$(cat $scanResults)"
 tja=$(<$scanResults)
 
 echo "scanResults2<<EOF" >>$GITHUB_ENV
+echo "" >>$GITHUB_ENV
 for i in "${tja[@]}"; do
     echo "$i"
     echo "$i" >>$GITHUB_ENV
