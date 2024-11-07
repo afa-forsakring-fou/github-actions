@@ -5,8 +5,7 @@ metaDataTableFormat='table(vulnerability.effectiveSeverity, vulnerability.cvssSc
 containerTag="eu.gcr.io/fou-delivery/fou-admin-web:f0d2cdab8077c8b9d33208fc7392f23e2036ffb9"
 gcloud artifacts docker images scan --remote --format='value(response.scan)' "$containerTag" >scan_id.txt
 gcloud artifacts docker images list-vulnerabilities "$(cat scan_id.txt)" --format="$metaDataTableFormat" >"$scanResults"
-echo "Here are the scan results"
-cat $scanResults
+echo "Here are the scan results:"
 
 CRITICAL=$(grep -c "${vulnerabilitySeverityRating[0]}" <"$scanResults")
 HIGH=$(grep -c "${vulnerabilitySeverityRating[1]}" <"$scanResults")
