@@ -20,10 +20,23 @@ echo "LOW: $LOW"
 
 hej="$(cat $scanResults)"
 
-echo "scanResults="$(cat $scanResults)"" >>$GITHUB_OUTPUT
-
-echo "scanResults="$(cat $scanResults)"" >>$GITHUB_ENV
+tja=$(<$scanResults)
 
 echo "scanResults2<<EOF" >>$GITHUB_ENV
-echo $hej >>$GITHUB_ENV
+for i in "${tja[@]}"; do
+    echo "$i"
+    echo "$i" >>$GITHUB_ENV
+    # or do whatever with individual element of the array
+done
+
 echo "EOF" >>$GITHUB_ENV
+
+# for (( i=0;i<$tja;i++)); do
+#    echo $tja[$i]
+# done
+
+# echo "scanResults="$(cat $scanResults)"" >>$GITHUB_OUTPUT
+
+# echo "scanResults="$(cat $scanResults)"" >>$GITHUB_ENV
+
+# echo $hej >>$GITHUB_ENV
