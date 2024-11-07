@@ -21,6 +21,7 @@ echo "LOW: $LOW"
 resultsVar=$(<$scanResults)
 echo "scanResults<<EOF" >>$GITHUB_ENV
 echo "" >>$GITHUB_ENV
+echo "Container image scanning found the following vulnerabilities:" >>$GITHUB_ENV
 echo "<pre>" >>$GITHUB_ENV
 
 for i in "${resultsVar[@]}"; do
