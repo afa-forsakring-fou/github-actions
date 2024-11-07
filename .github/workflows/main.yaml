@@ -111,50 +111,9 @@ jobs:
         run: bash ./scanimages.sh
         working-directory: ${{ github.workspace }}/composite-actions
 
-      # - name: Set the value
-      #   id: step_one
-      #   run: |
-      #     echo "FOO=$(git status)" >> $GITHUB_OUTPUT
-
-      # - name: Use the value
-      #   id: step_two
-      #   run: |
-      #     echo "${{ steps.step_one.outputs.FOO }}"
-
-      - name: Use the value
-        id: step_three
-        run: |
-          echo "${{ steps.scan.outputs.scanResults }}"
-
-      - name: Use the value
-        id: step_four
-        working-directory: ${{ github.workspace }}/composite-actions
-        run: |
-          cat scanResults
-
       - uses: mshick/add-pr-comment@v2
         with:
-          message: "${{ env.scanResults2 }}"
-
-      # - uses: mshick/add-pr-comment@v2
-      #   with:
-      #     working-directory: ${{ github.workspace }}/composite-actions
-      #     message-path: |
-      #       ${{ github.workspace }}/composite-actions/scanResults
-
-      - name: Hello world
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-        env:
-          COMMENT_BODY: "${{ env.scanResults2 }}"
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: process.env.COMMENT_BODY
-            })
+          message: "${{ env.scanResults }}"
 
       - name: React steps
         if: "${{ inputs.FRAMEWORK == 'react' }}"
