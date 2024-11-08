@@ -6,8 +6,6 @@ echo $IMAGE_TAG
 
 vulnerabilitySeverityRating=(CRITICAL HIGH MEDIUM LOW)
 metaDataTableFormat='table(vulnerability.effectiveSeverity, vulnerability.cvssScore, vulnerability.packageIssue[0].affectedPackage, vulnerability.packageIssue[0].affectedVersion.name, vulnerability.packageIssue[0].fixedVersion.name, vulnerability.shortDescription)'
-containerTag="eu.gcr.io/fou-delivery/fou-admin-web:f0d2cdab8077c8b9d33208fc7392f23e2036ffb9"
-containerTag="eu.gcr.io/fou-delivery/fou-admin-web:f0d2cdab8077c8b9d33208fc7392f23e2036ffb9"
 
 gcloud artifacts docker images scan --format='value(response.scan)' "$IMAGE_TAG" >scan_id.txt
 gcloud artifacts docker images list-vulnerabilities "$(cat scan_id.txt)" --format="$metaDataTableFormat" >"$scanResults"
@@ -32,7 +30,6 @@ echo "<pre>" >>$GITHUB_ENV
 for i in "${resultsVar[@]}"; do
     echo "$i"
     echo "$i" >>$GITHUB_ENV
-    # or do whatever with individual element of the array
 done
 
 echo "</pre>" >>$GITHUB_ENV
