@@ -263,7 +263,7 @@ jobs:
 
       - name: Container Scan
         id: scan
-        run: bash ./scanimages.sh
+        run: bash ./scanimages.sh ${{ env.IMAGE_TAG }}
         working-directory: ${{ github.workspace }}/composite-actions
 
       - uses: mshick/add-pr-comment@v2

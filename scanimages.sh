@@ -1,7 +1,7 @@
 touch scanResults
 scanResults="scanResults"
 
-eval "$(make EXPORT_IMAGE_TAG)"
+IMAGE_TAG=$1
 echo $IMAGE_TAG
 
 vulnerabilitySeverityRating=(CRITICAL HIGH MEDIUM LOW)
