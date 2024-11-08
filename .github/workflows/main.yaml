@@ -109,7 +109,7 @@ jobs:
     name: Build and Deploy to GKE
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: build-and-test
+    needs: [create-and-scan-docker-image, build-and-test]
     if: github.ref == 'refs/heads/dev'
     steps:
       - name: Checkout
