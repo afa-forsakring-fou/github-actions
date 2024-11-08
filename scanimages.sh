@@ -7,7 +7,7 @@ echo $IMAGE_TAG
 if [ -z "$1" ]; then
     echo "Could not find any image tag so no possiblity to perform scan"
     echo "scanResults="Could not find any image tag so no possiblity to perform scan"" >>$GITHUB_ENV
-    return
+    exit 0
 fi
 
 vulnerabilitySeverityRating=(CRITICAL HIGH MEDIUM LOW)
