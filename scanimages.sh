@@ -4,6 +4,12 @@ scanResults="scanResults"
 IMAGE_TAG=$1
 echo $IMAGE_TAG
 
+if [ -z "$1" ]; then
+    echo "Could not find any image tag so no possiblity to perform scan"
+    echo "scanResults="Could not find any image tag so no possiblity to perform scan"" >>$GITHUB_ENV
+    return
+fi
+
 vulnerabilitySeverityRating=(CRITICAL HIGH MEDIUM LOW)
 metaDataTableFormat='table(vulnerability.effectiveSeverity, vulnerability.cvssScore, vulnerability.packageIssue[0].affectedPackage, vulnerability.packageIssue[0].affectedVersion.name, vulnerability.packageIssue[0].fixedVersion.name, vulnerability.shortDescription)'
 
