@@ -190,6 +190,15 @@ jobs:
       - name: Check for submodule and 'skip actions'
         uses: ./composite-actions/.github/workflows/actions/submodule-check
 
+      - name: Validate kubernetes config
+        uses: yokawasa/action-setup-kube-tools@v0.9.2
+        with:
+          setup-tools: |
+            kubeconform
+            kustomize
+      - run: |
+          kustomize build k8s/dev | kubeconform -verbose -ignore-missing-schemas
+
       - id: auth
         uses: google-github-actions/auth@v2
         with:
