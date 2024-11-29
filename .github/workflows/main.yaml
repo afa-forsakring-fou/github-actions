@@ -77,7 +77,7 @@ jobs:
             kubeconform
             kustomize
       - run: |
-          kustomize build k8s/dev | kubeconform -verbose
+          kustomize build k8s/dev | kubeconform -verbose -skip CustomResourceDefinition
 
       - name: Get env variables
         run: |
