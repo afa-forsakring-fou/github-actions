@@ -102,7 +102,7 @@ jobs:
         if: "${{ inputs.FRAMEWORK == 'dotnet' }}"
         uses: ./composite-actions/.github/workflows/actions/dotnet
         with:
-          GIT_TOKEN: ${{ secrets.GIT_PACKAGE_TOKEN3 }}
+          GIT_TOKEN: ${{ secrets.GIT_PACKAGE_TOKEN2 }}
           AZD_NUGET_FEED_TOKEN: ${{ secrets.AZD_NUGET_FEED_TOKEN }}
 
   build-to-gke:
