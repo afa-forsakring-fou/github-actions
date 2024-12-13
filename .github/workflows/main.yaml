@@ -89,6 +89,7 @@ jobs:
         if: "${{ inputs.FRAMEWORK == 'react' }}"
         uses: ./composite-actions/.github/workflows/actions/react
         with:
+          ref: hjalun/monorepo-lep
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           NODE_VERSION: ${{ inputs.NODE_VERSION }}
           X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
