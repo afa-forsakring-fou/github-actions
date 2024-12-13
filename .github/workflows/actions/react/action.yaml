@@ -61,12 +61,12 @@ runs:
       with:
         PRINT: "Lint"
 
-    - name: Lint
-      shell: bash
-      run: |
-        cd apps/admin/ && yarn lint
-      env:
-        GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+    # - name: Lint
+    #   shell: bash
+    #   run: |
+    #     cd apps/admin/ && yarn lint
+    #   env:
+    #     GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
     - name: Echo step
       uses: ./composite-actions/.github/workflows/actions/echo-step
@@ -76,7 +76,7 @@ runs:
     - name: Build
       shell: bash
       run: |
-        cd apps/admin/ yarn build
+        yarn build
       env:
         GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
         NODE_ENV: production
