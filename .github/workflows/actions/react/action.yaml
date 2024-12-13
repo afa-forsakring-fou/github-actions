@@ -1,26 +1,26 @@
-name: 'React'
-description: 'React build and test steps'
+name: "React"
+description: "React build and test steps"
 inputs:
   GIT_TOKEN:
-    description: 'GIT_TOKEN from secrets'
+    description: "GIT_TOKEN from secrets"
     required: true
   NODE_VERSION:
     description: "Node version"
     required: false
   X_HASURA_ADMIN_SECRET:
-    description: 'X_HASURA_ADMIN_SECRET from secrets'
+    description: "X_HASURA_ADMIN_SECRET from secrets"
     required: true
   HASURA_URL:
-    description: 'HASURA_URL from secrets'
+    description: "HASURA_URL from secrets"
     required: true
   CYPRESS_RECORD_KEY:
-    description: 'CYPRESS_RECORD_KEY from secrets'
+    description: "CYPRESS_RECORD_KEY from secrets"
     required: true
   MAIL:
-    description: 'Mail from secrets'
+    description: "Mail from secrets"
     required: false
   MATRIX:
-    description: 'MATRIX (runs) from input'
+    description: "MATRIX (runs) from input"
     required: false
     default: "1"
   COREPACK_ENABLE:
@@ -32,107 +32,107 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - name: Setup node
-    if: "${{ inputs.NODE_VERSION != '' }}"
-    uses: ./composite-actions/.github/workflows/actions/react/setup-node
-    with:
-      NODE_VERSION: ${{ inputs.NODE_VERSION }}
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-      COREPACK_ENABLE: ${{ inputs.COREPACK_ENABLE }}
+    - name: Setup node
+      if: "${{ inputs.NODE_VERSION != '' }}"
+      uses: ./composite-actions/.github/workflows/actions/react/setup-node
+      with:
+        NODE_VERSION: ${{ inputs.NODE_VERSION }}
+        GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+        COREPACK_ENABLE: ${{ inputs.COREPACK_ENABLE }}
 
-  - name: Echo step
-    uses: ./composite-actions/.github/workflows/actions/echo-step
-    if: github.event.repository.name == 'fou-web'
-    with:
-      PRINT: "Clean target"
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
+      if: github.event.repository.name == 'fou-web'
+      with:
+        PRINT: "Clean target"
 
-  - name: Clean target
-    shell: bash
-    if: github.event.repository.name == 'fou-web'
-    run: yarn clean
+    - name: Clean target
+      shell: bash
+      if: github.event.repository.name == 'fou-web'
+      run: yarn clean
 
-  - name: Get yarn and NextJS cache
-    uses: ./composite-actions/.github/workflows/actions/react/yarn-cache
-    with:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+    - name: Get yarn and NextJS cache
+      uses: ./composite-actions/.github/workflows/actions/react/yarn-cache
+      with:
+        GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
-  - name: Echo step
-    uses: ./composite-actions/.github/workflows/actions/echo-step
-    with:
-      PRINT: "Lint"
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
+      with:
+        PRINT: "Lint"
 
-  - name: Lint
-    shell: bash
-    run: |
-      yarn lint
-    env:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+    - name: Lint
+      shell: bash
+      run: |
+        cd apps/admin/ && yarn lint
+      env:
+        GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
 
-  - name: Echo step
-    uses: ./composite-actions/.github/workflows/actions/echo-step
-    with:
-      PRINT: "Build"
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
+      with:
+        PRINT: "Build"
 
-  - name: Build
-    shell: bash
-    run: |
-      yarn build
-    env:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-      NODE_ENV: production
-      X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
-      HASURA_URL: ${{ inputs.HASURA_URL }}
+    - name: Build
+      shell: bash
+      run: |
+        cd apps/admin/ yarn build
+      env:
+        GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+        NODE_ENV: production
+        X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
+        HASURA_URL: ${{ inputs.HASURA_URL }}
 
-  - name: Echo step
-    uses: ./composite-actions/.github/workflows/actions/echo-step
-    with:
-      PRINT: "Run tests (CI)"
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
+      with:
+        PRINT: "Run tests (CI)"
 
-  - name: Run tests (CI)
-    shell: bash
-    id: run_tests
-    run: |
-      echo "status=failure" >> $GITHUB_OUTPUT
-      yarn test:ci
-      echo "status=success" >> $GITHUB_OUTPUT
-    env:
-      GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-      CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
-      X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
-      HASURA_URL: ${{ inputs.HASURA_URL }}
+    - name: Run tests (CI)
+      shell: bash
+      id: run_tests
+      run: |
+        echo "status=failure" >> $GITHUB_OUTPUT
+        cd apps/admin/ yarn test:ci
+        echo "status=success" >> $GITHUB_OUTPUT
+      env:
+        GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
+        CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
+        X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
+        HASURA_URL: ${{ inputs.HASURA_URL }}
 
-  - name: Echo step
-    uses: ./composite-actions/.github/workflows/actions/echo-step
-    with:
-      PRINT: "Upload coverage data"
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
+      with:
+        PRINT: "Upload coverage data"
 
-  - name: Upload coverage data
-    uses: actions/upload-artifact@v4
-    if: steps.run_tests.outputs.status == 'success'
-    with:
-      name: coverage
-      path: coverage
+    - name: Upload coverage data
+      uses: actions/upload-artifact@v4
+      if: steps.run_tests.outputs.status == 'success'
+      with:
+        name: coverage
+        path: coverage
 
-  - name: Echo step
-    uses: ./composite-actions/.github/workflows/actions/echo-step
-    with:
-      PRINT: "Upload screenshots"
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
+      with:
+        PRINT: "Upload screenshots"
 
-  - name: Upload screenshots
-    uses: actions/upload-artifact@v4
-    if: steps.run_tests.outputs.status != 'success'
-    with:
-      name: cypress-screenshots
-      path: cypress/screenshots
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v4
+      if: steps.run_tests.outputs.status != 'success'
+      with:
+        name: cypress-screenshots
+        path: cypress/screenshots
 
-  - name: Echo step
-    uses: ./composite-actions/.github/workflows/actions/echo-step
-    with:
-      PRINT: "Upload videos"
+    - name: Echo step
+      uses: ./composite-actions/.github/workflows/actions/echo-step
+      with:
+        PRINT: "Upload videos"
 
-  - name: Upload videos
-    uses: actions/upload-artifact@v4
-    if: steps.run_tests.outputs.status != 'success'
-    with:
-      name: cypress-videos
-      path: cypress/videos
+    - name: Upload videos
+      uses: actions/upload-artifact@v4
+      if: steps.run_tests.outputs.status != 'success'
+      with:
+        name: cypress-videos
+        path: cypress/videos
