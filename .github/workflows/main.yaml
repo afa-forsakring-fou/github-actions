@@ -17,6 +17,11 @@ on:
         required: false
         type: boolean
         default: false
+      SCAN_IMAGE:
+        description: "If docker image should be scanned for CVEs"
+        required: false
+        type: boolean
+        default: true
 
 name: Main Workflow
 
@@ -162,6 +167,7 @@ jobs:
   create-and-scan-docker-image:
     needs: setup-matrix
     name: Create and scan docker image
+    if: "${{ inputs.SCAN_IMAGE == true }}"
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
