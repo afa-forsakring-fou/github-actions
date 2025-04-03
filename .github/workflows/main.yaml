@@ -96,8 +96,6 @@ jobs:
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           NODE_VERSION: ${{ inputs.NODE_VERSION }}
-          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
-          HASURA_URL: ${{ secrets.HASURA_URL }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           MAIL: ${{ secrets.MAIL }}
           MATRIX: ${{ inputs.MATRIX }}
@@ -162,7 +160,6 @@ jobs:
           GIT_TOKEN: ${{secrets.GIT_TOKEN}}
           GIT_USER: "GithubActions"
           AZD_NUGET_FEED_TOKEN: ${{ secrets.AZD_NUGET_FEED_TOKEN }}
-          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
 
   create-and-scan-docker-image:
     needs: setup-matrix
@@ -222,7 +219,6 @@ jobs:
           GIT_TOKEN: ${{secrets.GIT_TOKEN}}
           GIT_USER: "GithubActions"
           AZD_NUGET_FEED_TOKEN: ${{ secrets.AZD_NUGET_FEED_TOKEN }}
-          X_HASURA_ADMIN_SECRET: ${{ secrets.X_HASURA_ADMIN_SECRET }}
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v2

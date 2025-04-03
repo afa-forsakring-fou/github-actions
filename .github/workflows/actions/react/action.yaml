@@ -7,12 +7,6 @@ inputs:
   NODE_VERSION:
     description: "Node version"
     required: false
-  X_HASURA_ADMIN_SECRET:
-    description: 'X_HASURA_ADMIN_SECRET from secrets'
-    required: true
-  HASURA_URL:
-    description: 'HASURA_URL from secrets'
-    required: true
   CYPRESS_RECORD_KEY:
     description: 'CYPRESS_RECORD_KEY from secrets'
     required: true
@@ -80,8 +74,6 @@ runs:
     env:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
       NODE_ENV: production
-      X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
-      HASURA_URL: ${{ inputs.HASURA_URL }}
 
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
@@ -98,8 +90,6 @@ runs:
     env:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
       CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
-      X_HASURA_ADMIN_SECRET: ${{ inputs.X_HASURA_ADMIN_SECRET }}
-      HASURA_URL: ${{ inputs.HASURA_URL }}
 
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step
