@@ -7,9 +7,6 @@ inputs:
   NODE_VERSION:
     description: "Node version"
     required: false
-  CYPRESS_RECORD_KEY:
-    description: 'CYPRESS_RECORD_KEY from secrets'
-    required: true
   MAIL:
     description: 'Mail from secrets'
     required: false
@@ -89,7 +86,6 @@ runs:
       echo "status=success" >> $GITHUB_OUTPUT
     env:
       GIT_TOKEN: ${{ inputs.GIT_TOKEN }}
-      CYPRESS_RECORD_KEY: ${{ inputs.CYPRESS_RECORD_KEY }}
 
   - name: Echo step
     uses: ./composite-actions/.github/workflows/actions/echo-step

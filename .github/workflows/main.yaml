@@ -96,7 +96,6 @@ jobs:
         with:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           NODE_VERSION: ${{ inputs.NODE_VERSION }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           MAIL: ${{ secrets.MAIL }}
           MATRIX: ${{ inputs.MATRIX }}
           COREPACK_ENABLE: ${{ inputs.COREPACK_ENABLE }}
